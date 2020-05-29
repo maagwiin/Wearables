@@ -7,10 +7,11 @@
    Anel RGB - Estados de atmosfera - Ring004.ino
    Integração com projeto
 
-   Objetivo: Implementar troca de estado por meio de dado recebido.
+   Objetivo: Implementar troca de estado por meio de dado recebido - Serial.
 
    Conclusões:
-     - 
+     - Usando dados vindos da comunicação serial em 9600;
+     - Apresenta uma pequena latência na troca de estados.
     
    Autor: Magnu Windell Araújo Santos, Maio - 2020.
 
@@ -20,7 +21,10 @@
 
 #define PIN 7 //Pino de comunicação com o anel
 #define NUMPIXELS 16 //Número de pixels(leds) no equipamento
-#define DELAYVAL 500 //Tempo de pausa
+#define DELAYVAL 200 //Tempo de pausa
+
+int recebido = 0; //Dado recebido por serial
+int dado = 0;     //Dado para comutação de estado
 
 Adafruit_NeoPixel ring(NUMPIXELS, PIN); //Cria o objeto 'ring' do tipo Adafruit_NeoPixel
 
@@ -28,25 +32,20 @@ void setup() {
   ring.begin(); //Inicialização do objeto 'ring'
   ring.clear(); //Apaga todos os leds
   ring.show();  //Envia atualização para o hardware
-
+  Serial.begin(9600); //Inicia comunicação serial
   starting();   //Executa rotina de inicialização
+  normal();     //Chama rotina para ambiente normal
 }
 
 void loop() {
-  normal();
-  delay(30000);
-  co();
-  normal();
-  delay(10000);
-  lpg();
-  normal();
-  delay(10000);
-  co_lpg();
-  normal();
+  if(Serial.available()){             //Tem dado na serial?
+    recebido = Serial.parseInt();     //Converte o dado em inteiro
+    change();                         //Chama rotina de mudança de estado
+   }
 }
 
 void starting() {
-  int rpt = 12;   //Repetição da rotina
+  int rpt = 2;   //Repetição da rotina
   int del = 75;   //Tempo de delay entre acionamento dos leds 
   for(int i=0; i<rpt; i++){ //Em cada repetição
     colorWipe(ring.Color(150, 150, 150), del); //Wipe em branco
@@ -66,34 +65,75 @@ void colorWipe(uint32_t color, int wait) {
   }
 }
 
-void normal(){
-  colorFill(ring.Color(150, 150, 150));
+
+void change(){
+  if(Serial.available()){ 
+    recebido = Serial.parseInt();
+   }
+  if(recebido > 0 && recebido < 5 && recebido != dado){     //Avalia o dado recebido
+      dado = recebido;                                      //Armazena recebido na variável de comutação
+    }
+     switch(dado){   //Testa a variável de comutação
+      case 1:        //Atmosfera normal
+        normal();
+        change();
+        break;
+      case 2:        //CO presente
+        co();
+        change();
+        break;
+      case 3:        //GLP presente
+        lpg();
+        change();
+        break;
+      case 4:       //CO e LPG presentes
+        co_lpg();
+        change();
+        break;
+      default:      //Segurança
+        normal();
+        change();
+        break;
+    }
 }
 
-void co(){
-  for(int j=0; j<=20; j++){
+void normal(){    //Rotina de atmosfera normal
+  if(Serial.available()){
+      change();
+    }
+  colorFill(ring.Color(150, 150, 150)); //Troca cor dos leds para branco
+  ring.show();
+}
+
+void co(){        //Rotina de atmosfera contaminada com CO  --- Blink leds em verde
+    if(Serial.available()){
+      change();
+    }
     colorFill(ring.Color(0, 150, 0));
     ring.show();
     delay(DELAYVAL);
     ring.clear();
     ring.show();
     delay(DELAYVAL);
-  }
 }
 
-void lpg(){
-  for(int j=0; j<=20; j++){
+void lpg(){       //Rotina de atmosfera contaminada com LPG  --- Blink leds em azul
+    if(Serial.available()){
+      change();
+    }
     colorFill(ring.Color(0, 0, 150));
     ring.show();
     delay(DELAYVAL);
     ring.clear();
     ring.show();
     delay(DELAYVAL);
-  }
 }
 
-void co_lpg(){
-  for(int j=0; j<=20; j++){
+void co_lpg(){    //Rotina de atmosfera contaminada com CO e LPG  --- Blink leds em vermelho
+  while(dado == 4){
+    if(Serial.available()){
+      change();
+    }
     colorFill(ring.Color(150, 0, 0));
     ring.show();
     delay(DELAYVAL);
@@ -103,7 +143,7 @@ void co_lpg(){
   }
 }
 
-void colorFill(uint32_t color) {
+void colorFill(uint32_t color) { //Rotina de preenchimento de leds
   ring.fill(color, 0, NUMPIXELS);
   ring.show();
 }
