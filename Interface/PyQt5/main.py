@@ -19,12 +19,6 @@ class MainWindow(QWidget):
         self.setFixedSize(1200, 700)
     
     def create_widgets(self):
-        self.gp_log = QGroupBox("Log")
-        self.gp_log_lay = QVBoxLayout()
-
-        self.gp_lpg = QGroupBox("LPG - Liquefied Petroleum Gas")
-        self.gp_co = QGroupBox("CO - Carbon Monoxide")
-        # ID label
         self.label_id = QLabel()
         self.label_id.setText("ID: AA01")
         self.label_id.setStyleSheet(
@@ -32,16 +26,17 @@ class MainWindow(QWidget):
         )
 
         self.select_com = QPushButton("Change", self)
-
         self.btn_conn = QPushButton("Connect", self)
-
+        self.btn_save = QPushButton("Save Log", self)
         self.btn_reset = QPushButton("Reset", self)
 
-        self.txt_log = QTextEdit()
 
+        self.gp_log = QGroupBox("Log")
+        self.gp_log_lay = QVBoxLayout()
+        self.txt_log = QTextEdit()
         self.gp_log_lay.addWidget(self.txt_log)
 
-        # Create Charts
+
         self.create_charts()
     
     def create_charts(self):
@@ -72,13 +67,12 @@ class MainWindow(QWidget):
 
 
 
-
-
     def set_layout(self):
         # COM Layout
         self.com_layout = QHBoxLayout()
         self.com_layout.addWidget(self.select_com)
         self.com_layout.addWidget(self.btn_conn)
+        self.com_layout.addWidget(self.btn_save)
         self.com_layout.addWidget(self.btn_reset)
         
         self.gp_log.setLayout(self.gp_log_lay)
