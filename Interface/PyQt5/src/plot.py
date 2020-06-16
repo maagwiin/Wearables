@@ -1,33 +1,29 @@
 import sys
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QHBoxLayout
 from PyQt5.QtChart import QChart, QChartView, QValueAxis, QCategoryAxis, QLineSeries
 
 #### Rascunho
 
 class Plot(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, gas, parent=None):
         super(Plot, self).__init__()
-        self.lpg_chart = QChart()
-        self.lpg_series = QLineSeries()
-        self.lpg_series.append(1, 1)
-        self.lpg_series.append(2, 2)
-        self.lpg_series.append(3, 1)
-        self.lpg_series.append(4, 2)
+        self.gas = gas
+        self.chart = QChart()
+        self.series = QLineSeries()
+        self.series.append(1, 1)
+        self.series.append(2, 2)
+        self.series.append(3, 1)
+        self.series.append(4, 2)
 
-        self.lpg_chart.addSeries(self.lpg_series)
-        self.lpg_chart.setTitle("LPG - History Chart")
+        self.chart.addSeries(self.series)
 
-        self.lpg_chart_view = QChartView(self.lpg_chart)
+        if self.gas == 'A':
+            self.chart.setTitle("LPG - History Chart")
+        elif self.gas == 'B':
+            self.chart.setTitle("CO - History Chart")
 
+        self.chart_view = QChartView(self.chart)
+        self.chart_lay = QHBoxLayout()
+        self.chart_lay.addWidget(self.chart_view)
 
-        self.co_chart = QChart()
-        self.co_series = QLineSeries()
-        self.co_series.append(1, 1)
-        self.co_series.append(2, 2)
-        self.co_series.append(3, 1)
-        self.co_series.append(4, 2)
-
-        self.co_chart.addSeries(self.co_series)
-        self.co_chart.setTitle("CO - History Chart")
-
-        self.co_chart_view = QChartView(self.co_chart)
+        self.setLayout(self.chart_lay)
