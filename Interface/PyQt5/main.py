@@ -5,6 +5,7 @@ from PyQt5.QtGui import QIcon
 from src.lid import Lid
 from src.com import Com
 from src.log import Log
+from src.meter import Meter
 from src.plot import Plot
 
 
@@ -24,6 +25,10 @@ class MainWindow(QWidget):
         self.lid = Lid(self)
         self.com = Com(self)
         self.log = Log(self)
+        self.lpg_meter = Meter('A', self)
+        self.co_meter = Meter('B', self)
+        self.lpg_plot = Plot('A', self)
+        self.co_plot = Plot('B', self)
 
 
     def set_layout(self):
@@ -31,8 +36,15 @@ class MainWindow(QWidget):
         self.main_layout.addWidget(self.lid, 0, 0, 1, 2)
         self.main_layout.addWidget(self.com, 1, 0, 1, 2)
         self.main_layout.addWidget(self.log, 2, 0, 2, 1)
-        #self.main_layout.addWidget(self.lpg_chart_view, 2, 1, 1, 1)
-        #self.main_layout.addWidget(self.co_chart_view, 3, 1, 1, 1)
+        self.main_layout.addWidget(self.lpg_meter, 2, 1, 1, 1)
+        self.main_layout.addWidget(self.co_meter, 3, 1, 1, 1)
+        self.main_layout.addWidget(self.lpg_plot, 4, 0, 5, 1)
+        self.main_layout.addWidget(self.co_plot, 4, 1, 5, 1)
+        self.main_layout.setRowStretch(0,1)
+        self.main_layout.setRowStretch(1,2)
+        self.main_layout.setRowStretch(2,3)
+        self.main_layout.setRowStretch(3,3)
+        self.main_layout.setRowStretch(4,7)
         self.setLayout(self.main_layout)
 
 
