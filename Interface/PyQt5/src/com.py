@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QGroupBox, QLabel, QPushButton, QComboBox)
+from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QPushButton, QComboBox)
 
 class Com(QWidget):
     def __init__(self, parent=None):
