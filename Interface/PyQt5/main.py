@@ -1,10 +1,8 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout,
-                            QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox,
-                            QGraphicsView)
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox, QGraphicsView)
 from PyQt5.QtGui import QIcon
 from PyQt5.QtChart import QChart, QChartView, QValueAxis, QCategoryAxis, QLineSeries
-from PyQt5.Qt import Qt
+from src.com import Com
 
 class MainWindow(QWidget):
     def __init__(self, parent=None):
@@ -25,11 +23,7 @@ class MainWindow(QWidget):
             "font-size: 20px; color: red; padding: 10px"
         )
 
-        self.select_com = QPushButton("Change", self)
-        self.btn_conn = QPushButton("Connect", self)
-        self.btn_save = QPushButton("Save Log", self)
-        self.btn_reset = QPushButton("Reset", self)
-
+        self.com = Com(self)
 
         self.gp_log = QGroupBox("Log")
         self.gp_log_lay = QVBoxLayout()
@@ -68,18 +62,12 @@ class MainWindow(QWidget):
 
 
     def set_layout(self):
-        # COM Layout
-        self.com_layout = QHBoxLayout()
-        self.com_layout.addWidget(self.select_com)
-        self.com_layout.addWidget(self.btn_conn)
-        self.com_layout.addWidget(self.btn_save)
-        self.com_layout.addWidget(self.btn_reset)
         
         self.gp_log.setLayout(self.gp_log_lay)
 
         self.main_layout = QGridLayout(self)
         self.main_layout.addWidget(self.label_id, 0, 0, 1, 2)
-        self.main_layout.addLayout(self.com_layout, 1, 0, 1, 2)
+        self.main_layout.addWidget(self.com, 1, 0, 1, 2)
         self.main_layout.addWidget(self.gp_log, 2, 0, 2, 1)
         self.main_layout.addWidget(self.lpg_chart_view, 2, 1, 1, 1)
         self.main_layout.addWidget(self.co_chart_view, 3, 1, 1, 1)
