@@ -16,6 +16,7 @@ class Meter(QGroupBox):
         self.txt_meter.setStyleSheet(
             '* { background: none; color: red; font-size: 40px; text-align: center;}'
         )
+        self.txt_meter.setText("--- PPM")
 
         self.gp_meter_layH = QHBoxLayout()
         self.gp_meter_layV = QVBoxLayout()
