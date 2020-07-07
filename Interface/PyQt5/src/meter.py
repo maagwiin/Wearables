@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QV
 class Meter(QGroupBox):
     def __init__(self, gas, parent=None):
         super(Meter, self).__init__()
+        self.parent = parent
         self.gas = gas
         if self.gas == 'A':
             self.name = "  LPG - Liquefied Petroleum Gas  "
@@ -15,7 +16,6 @@ class Meter(QGroupBox):
         self.txt_meter.setStyleSheet(
             '* { background: none; color: red; font-size: 40px; text-align: center;}'
         )
-        self.txt_meter.setText("500 PPM")
 
         self.gp_meter_layH = QHBoxLayout()
         self.gp_meter_layV = QVBoxLayout()
