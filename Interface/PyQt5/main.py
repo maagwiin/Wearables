@@ -48,6 +48,7 @@ class MainWindow(QWidget):
         self.setLayout(self.main_layout)
 
 
+
 root = QApplication(sys.argv)
 app = MainWindow()
 app.show()
