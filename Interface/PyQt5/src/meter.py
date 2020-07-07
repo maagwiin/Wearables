@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox, QGraphicsView)
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox, QGraphicsView, QLabel)
 
 class Meter(QGroupBox):
     def __init__(self, gas, parent=None):
@@ -11,8 +11,19 @@ class Meter(QGroupBox):
             self.name = "  CO - Carbon Monoxide  "
         
         self.setTitle(self.name)
-        self.txt_meter = QTextEdit()
-        self.gp_meter_lay = QVBoxLayout()
-        self.gp_meter_lay.addWidget(self.txt_meter)
+        self.txt_meter = QLabel()
+        self.txt_meter.setStyleSheet(
+            '* { background: none; color: red; font-size: 40px; text-align: center;}'
+        )
+        self.txt_meter.setText("500 PPM")
+
+        self.gp_meter_layH = QHBoxLayout()
+        self.gp_meter_layV = QVBoxLayout()
+        self.gp_meter_layV.addStretch()
+        self.gp_meter_layV.addWidget(self.txt_meter)
+        self.gp_meter_layV.addStretch()
+        self.gp_meter_layH.addStretch()
+        self.gp_meter_layH.addLayout(self.gp_meter_layV)
+        self.gp_meter_layH.addStretch()
         
-        self.setLayout(self.gp_meter_lay)
+        self.setLayout(self.gp_meter_layH)

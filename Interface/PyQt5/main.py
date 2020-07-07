@@ -51,5 +51,6 @@ class MainWindow(QWidget):
 
 root = QApplication(sys.argv)
 app = MainWindow()
+root.setWindowIcon(QIcon("./static/icon.svg"))
 app.show()
 sys.exit(root.exec_())
