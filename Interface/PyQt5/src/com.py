@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QPushButton, QComboBox)
 class Com(QWidget):
     def __init__(self, parent=None):
         super(Com, self).__init__()
+        self.parent = parent
         self.create_widgets()
         self.set_layout()
     

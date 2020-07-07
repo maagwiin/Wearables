@@ -7,6 +7,7 @@ from src.com import Com
 from src.log import Log
 from src.meter import Meter
 from src.plot import Plot
+from core.exe import Exe
 
 
 class MainWindow(QWidget):
@@ -15,6 +16,8 @@ class MainWindow(QWidget):
         self.settings()
         self.create_widgets()
         self.set_layout()
+        self.attvalue()
+        
 
     def settings(self):
         self.setWindowTitle("Interface De Monitoramento - Wearables Gases - NERA")
@@ -47,9 +50,11 @@ class MainWindow(QWidget):
         self.main_layout.setRowStretch(4,7)
         self.setLayout(self.main_layout)
 
-
+    def attvalue(self):
+        self.core = Exe(self)
 
 root = QApplication(sys.argv)
 app = MainWindow()
+root.setWindowIcon(QIcon("./static/icon.svg"))
 app.show()
 sys.exit(root.exec_())

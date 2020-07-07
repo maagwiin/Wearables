@@ -1,1 +1,4 @@
 .vscode/
+build.txt
+debug.log
+build.json
