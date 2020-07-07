@@ -6,9 +6,9 @@ class Meter(QGroupBox):
         super(Meter, self).__init__()
         self.gas = gas
         if self.gas == 'A':
-            self.name = "LPG - Liquefied Petroleum Gas"
+            self.name = "  LPG - Liquefied Petroleum Gas  "
         elif self.gas == 'B':
-            self.name = "CO - Carbon Monoxide"
+            self.name = "  CO - Carbon Monoxide  "
         
         self.setTitle(self.name)
         self.txt_meter = QTextEdit()
