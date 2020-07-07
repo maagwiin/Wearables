@@ -1,4 +1,5 @@
 .vscode/
+output/
 build.txt
 debug.log
 build.json
