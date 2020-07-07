@@ -1,1 +1,0 @@
-MQ-2 Sensor Case by RJGII on Thingiverse: https://www.thingiverse.com/thing:2893581
