@@ -23,6 +23,9 @@ class MainWindow(QWidget):
         self.setWindowTitle("Interface De Monitoramento - Wearables Gases - NERA")
         self.setWindowIcon(QIcon("./static/icon.svg"))
         self.setFixedSize(1200, 700)
+        self.setStyleSheet(
+            '* { background: white; }'
+        )
     
     def create_widgets(self):
         self.lid = Lid(self)
