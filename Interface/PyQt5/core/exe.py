@@ -73,7 +73,6 @@ class Exe():
     def att_list(self):
         self.index = self.index[1:]
         self.index.append(self.index[-1] + 1)
-
         self.lpg_list = self.lpg_list[1:]
         self.lpg_list.append(self.lpg_current)
         self.co_list = self.co_list[1:]
