@@ -9,7 +9,7 @@ class Com(QWidget):
         self.set_layout()
     
     def create_widgets(self):
-        self.select_com = QPushButton("Change", self)
+        self.select_com = QPushButton("Select", self)
         self.btn_conn = QPushButton("Connect", self)
         self.btn_save = QPushButton("Save Log", self)
         self.btn_reset = QPushButton("Reset", self)
