@@ -2,7 +2,10 @@ import sys
 import os
 import random
 import time
+import serial
+import serial.tools.list_ports
 from datetime import datetime
+from PyQt5 import QtCore, QtWidgets, QtSerialPort
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFileDialog
 
@@ -11,9 +14,10 @@ class Exe():
         super(Exe, self).__init__()
         self.parent = parent
         self.timer = QTimer()
-
+    
         self.start()
 
+        self.parent.com.select_com.currentIndexChanged.connect(self.select_change)
         self.parent.com.btn_conn.clicked.connect(self.ar_connect)
         self.parent.com.btn_save.clicked.connect(self.save_log)
         self.parent.com.btn_reset.clicked.connect(self.reset_system)
@@ -29,8 +33,10 @@ class Exe():
         self.index = list(range(30))
         self.init_log()
         self.init_plot()
-        self.parent.com.btn_conn.setDisabled(False)
+        self.parent.com.btn_conn.setDisabled(True)
         self.parent.com.btn_save.setDisabled(True)
+        self.parent.com.select_com.setDisabled(False)
+        self.select_engine()
         
 
 
@@ -51,12 +57,29 @@ class Exe():
         self.parent.lpg_plot.y = self.lpg_list
         self.parent.co_plot.y = self.co_list
 
+    
+    def select_change(self):
+        print(self.parent.com.select_com.currentText())
+        self.selected_port = self.disp_ports.get(self.parent.com.select_com.currentText())
+        if self.parent.com.select_com.currentText() == '':
+            self.parent.com.btn_conn.setDisabled(True)
+            self.parent.com.select_com.setDisabled(False)
+        else:
+            self.parent.com.btn_conn.setDisabled(False)
+        
+
+    def select_engine(self):
+        self.ports = serial.tools.list_ports.comports()
+        self.disp_ports = {'':''}
+        for port, desc, wid in sorted(self.ports):
+            self.disp_ports['{}'.format(desc)] = port
+        for port in self.disp_ports:
+            self.parent.com.select_com.addItem(port)
 
 
     def push(self):
         self.lpg_current = random.randrange(100, 1000, 1)
         self.co_current = random.randrange(100, 1000, 1)
-
 
         self.att_meter()
         self.att_list()
@@ -98,10 +121,16 @@ class Exe():
 
     def ar_connect(self):
         self.init_log()
+        self.aserial = serial.Serial('{}'.format(self.selected_port), 9600, timeout=2,
+                                        parity=serial.PARITY_EVEN, rtscts=1)
         self.parent.log.txt_log.append('Iniciando Registros...\n')
+        s = self.aserial.read(100)
+        print(s)
+        
         self.timer.start(1000)
         self.parent.com.btn_conn.setDisabled(True)
         self.parent.com.btn_save.setDisabled(False)
+        self.parent.com.select_com.setDisabled(True)
 
 
 
@@ -125,4 +154,7 @@ class Exe():
         self.timer.stop()
         self.parent.lpg_meter.txt_meter.setText("--- PPM")
         self.parent.co_meter.txt_meter.setText("--- PPM")
+        self.ports = []
+        self.disp_ports = {}
+        self.parent.com.select_com.clear()
         self.start()

@@ -9,10 +9,13 @@ class Com(QWidget):
         self.set_layout()
     
     def create_widgets(self):
-        self.select_com = QPushButton("Select", self)
+        self.select_config()
         self.btn_conn = QPushButton("Connect", self)
         self.btn_save = QPushButton("Save Log", self)
         self.btn_reset = QPushButton("Reset", self)
+
+    def select_config(self):
+        self.select_com = QComboBox(self)
 
     def set_layout(self):
         self.com_layout = QHBoxLayout()
