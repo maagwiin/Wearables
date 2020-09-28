@@ -4,6 +4,7 @@ import random
 import time
 import serial
 import serial.tools.list_ports
+import asyncio
 from datetime import datetime
 from PyQt5 import QtCore, QtWidgets, QtSerialPort
 from PyQt5.QtCore import QTimer
@@ -22,9 +23,8 @@ class Exe():
         self.parent.com.btn_save.clicked.connect(self.save_log)
         self.parent.com.btn_reset.clicked.connect(self.reset_system)
         self.timer.timeout.connect(self.push)
-
-
-
+        
+        
     def start(self):
         self.lpg_current = 0
         self.co_current = 0
@@ -59,7 +59,6 @@ class Exe():
 
     
     def select_change(self):
-        print(self.parent.com.select_com.currentText())
         self.selected_port = self.disp_ports.get(self.parent.com.select_com.currentText())
         if self.parent.com.select_com.currentText() == '':
             self.parent.com.btn_conn.setDisabled(True)
@@ -78,19 +77,29 @@ class Exe():
 
 
     def push(self):
-        self.lpg_current = random.randrange(100, 1000, 1)
-        self.co_current = random.randrange(100, 1000, 1)
-
-        self.att_meter()
-        self.att_list()
-        self.att_plot()
-        self.att_log()
+        if self.aserial.in_waiting:
+            self.received = '';
+            self.received = self.aserial.read_until(terminator='/n', size=12)
+            print(self.received)
+            self.get_value()
+            self.att_meter()
+            self.att_list()
+            self.att_plot()
+            self.att_log()
+        self.timer.start(100)
+        
+    def get_value(self):
+        arId = self.received[0:4]
+        print(arId)
+        lpgVal = int(self.received[4:8])
+        coVal = int(self.received[8:12])
+        self.lpg_current = lpgVal
+        self.co_current = coVal
 
 
     def att_meter(self):
         self.parent.lpg_meter.txt_meter.setText("{} PPM".format(self.lpg_current))
         self.parent.co_meter.txt_meter.setText("{} PPM".format(self.co_current))
-
 
 
     def att_list(self):
@@ -108,8 +117,6 @@ class Exe():
         self.parent.lpg_plot.att()
         self.parent.co_plot.att()
 
-   
-
 
     def att_log(self):
         self.ts = time.time()
@@ -117,26 +124,23 @@ class Exe():
         self.parent.log.txt_log.append(self.timestamp + 'LPG: {} PPM --- CO: {} PPM'.format(self.lpg_current, self.co_current))
 
 
-
-
     def ar_connect(self):
         self.init_log()
         self.aserial = serial.Serial('{}'.format(self.selected_port), 9600, timeout=2,
                                         parity=serial.PARITY_EVEN, rtscts=1)
         self.parent.log.txt_log.append('Iniciando Registros...\n')
-        s = self.aserial.read(100)
-        print(s)
-        
-        self.timer.start(1000)
+    
         self.parent.com.btn_conn.setDisabled(True)
         self.parent.com.btn_save.setDisabled(False)
         self.parent.com.select_com.setDisabled(True)
+        self.push()
 
 
 
     def save_log(self):
         self.timer.stop()
         self.ts = time.time()
+        self.aserial.close()
         self.timestamp = datetime.fromtimestamp(self.ts).strftime(' %d/%m/%Y às %H:%M:%S ')
         self.parent.log.txt_log.append("\nRegistro finalizado em "+ self.timestamp)
         self.filename = QFileDialog.getSaveFileName(self.parent, 'Salvar Log', os.getenv('HOME'))
@@ -148,10 +152,9 @@ class Exe():
             pass
         
 
-
-
     def reset_system(self):
         self.timer.stop()
+        self.aserial.close()
         self.parent.lpg_meter.txt_meter.setText("--- PPM")
         self.parent.co_meter.txt_meter.setText("--- PPM")
         self.ports = []
