@@ -1,5 +1,4 @@
-import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox, QGraphicsView, QLabel)
+from PyQt5.QtWidgets import (QHBoxLayout, QVBoxLayout, QGroupBox, QLabel)
 
 class Meter(QGroupBox):
     def __init__(self, gas, parent=None):

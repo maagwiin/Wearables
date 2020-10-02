@@ -1,6 +1,5 @@
-import sys
 from PyQt5.QtWidgets import (QVBoxLayout, QGroupBox, QTextEdit)
-from PyQt5.Qt import Qt
+from PyQt5.QtCore import Qt
 
 class Log(QGroupBox):
     def __init__(self, parent=None):

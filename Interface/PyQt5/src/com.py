@@ -1,4 +1,3 @@
-import sys
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, QPushButton, QComboBox)
 
 class Com(QWidget):

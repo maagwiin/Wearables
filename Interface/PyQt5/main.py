@@ -1,7 +1,6 @@
 import sys
-from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QHBoxLayout, QVBoxLayout, QGroupBox, QLabel, QPushButton, QTextEdit, QComboBox, QGraphicsView)
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout)
 from PyQt5.QtGui import QIcon
-
 from src.lid import Lid
 from src.com import Com
 from src.log import Log

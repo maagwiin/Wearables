@@ -1,11 +1,8 @@
-import sys
-import pyqtgraph as pg
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QWidget, QHBoxLayout
+import pyqtgraph as pg
 from pyqtgraph import PlotWidget, plot
-
 from random import randint
-
 
 #### Rascunho
 ####self.graphWidget.clear()

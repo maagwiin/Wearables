@@ -1,10 +1,7 @@
-import sys
 import os
-import random
 import time
 import serial
 import serial.tools.list_ports
-import asyncio
 from datetime import datetime
 from PyQt5 import QtCore, QtWidgets, QtSerialPort
 from PyQt5.QtCore import QTimer
